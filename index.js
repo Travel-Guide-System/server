@@ -1,21 +1,28 @@
-if (process.env.NODE_ENV !== 'production') 
-    require('dotenv').config();
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
+const express = require("express");
+const mongoose = require("mongoose");
+const loaders = require("./loaders");
 
-const express = require('express');
-const mongoose = require('mongoose');
+async function startServer() {
+	const app = express();
+	await loaders.init(app);
+	app.listen(process.env.PORT || 80, (err) => {
+		if (err) {
+			console.log(err);
+			return;
+		}
+		console.log(`Server started on port ${process.env.PORT}`);
+	});
 
-mongoose.connect(process.env.MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-.then(() => console.log("Connected"))
-.catch(() => process.exit(-1));
+	const indexRoutes = require("./routes/index");
+	const userRoutes = require("./routes/user");
+    const placesRoutes= require("./routes/places");
+	const guideRoutes = require("./routes/guide");
+	app.use("/guide", guideRoutes);
+	app.use("/user", userRoutes);
+    app.use("/places",placesRoutes);
+	app.use("/", indexRoutes);
+}
 
-const app = express();
-
-app.use(express.json()); 
-app.use(express.urlencoded({extended: true}));
-
-app.get('/*', (req, res) => {
-    console.log("Routes not confirmed");
-});
-
-app.listen(process.env.PORT, ()=>console.log(`Server started on port ${process.env.PORT}`));
+startServer();

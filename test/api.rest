@@ -1,0 +1,24 @@
+
+GET http://localhost:80/ HTTP/1.1
+
+###
+
+POST http://localhost:80/
+Content-Type: application/json
+
+{
+    "name":"Shashank Sahu",
+    "email":"shashankcs083@gmail.com",
+    "mobileNo":"6307717181"
+}
+
+
+###
+
+POST http://localhost:80/user/login/
+Content-Type: application/json
+
+{
+    "name":"Shashank",
+    "mobileNo":"6307717161"
+}
