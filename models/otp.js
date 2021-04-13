@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-    number: {
+    mobileNo: {
         type: String,
         required: true,
     },
@@ -11,8 +11,8 @@ const schema = new mongoose.Schema({
     },
 });
 
-schema.index({createdAt: 1}, {expireAfterSeconds: 60}); //The otp fails to work after 30 seconds
+schema.index({createdAt: 1}, {expireAfterSeconds: 120}); //The otp fails to work after 30 seconds
 
-const model = mongoose.model('otp', schema);
+const model = mongoose.model('OTP', schema);
 
 module.exports = model;

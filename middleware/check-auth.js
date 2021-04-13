@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
 		if (typeof token !=undefined) {
 			// If token exists simply verify it
 			const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-			req.userData = decodedToken;
+			req.user = decodedToken;
 			next();
 		} else {
 			handleError(res);

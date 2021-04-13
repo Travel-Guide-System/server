@@ -19,9 +19,11 @@ async function startServer() {
 	const userRoutes = require("./routes/user");
     const placesRoutes= require("./routes/places");
 	const guideRoutes = require("./routes/guide");
+	const authRoutes= require("./routes/auth");
 	app.use("/guide", guideRoutes);
 	app.use("/user", userRoutes);
     app.use("/places",placesRoutes);
+	app.use("/auth",authRoutes);
 	app.use("/", indexRoutes);
 }
 

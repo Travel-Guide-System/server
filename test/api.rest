@@ -13,12 +13,23 @@ Content-Type: application/json
 }
 
 
-###
+### Otp Sending Testing
 
-POST http://localhost:80/user/login/
+POST http://localhost:80/auth/login/
 Content-Type: application/json
 
 {
-    "name":"Shashank",
     "mobileNo":"6307717161"
 }
+
+
+#### Otp Verification Testing
+
+POST http://localhost:80/auth/verifyOTP/
+Content-Type: application/json
+
+{
+    "mobileNo":"6307717161",
+    "otp":158415
+}
+

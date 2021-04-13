@@ -1,18 +1,12 @@
 const router = require("express").Router();
-const jwt=require("jsonwebtoken");
-const User=require("../models/user");
-const Otp=require("../models/otp");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const OTP = require("../models/otp");
+const sms = require("../services/sms");
 
 
-router.post("/login", async (req, res) => {
-  const {name,mobileNo}=req.body;
-  const user={
-    name:name,
-  }
-  const accessToken= jwt.sign(user,process.env.ACCESS_TOKEN_SECRET);
-  res.status(200).json({accessToken:accessToken,msg:"Sucess"});
-
-  
+router.get("/", async (req, res) => {
+  res.status(200).json({success:"Welcome to TravelGuide"})
 });
 
 module.exports = router;
