@@ -9,6 +9,11 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    verified:{
+        type:Boolean,
+        default:false,
+        requied:true,
+    }
 });
 
 schema.index({createdAt: 1}, {expireAfterSeconds: 120}); //The otp fails to work after 30 seconds

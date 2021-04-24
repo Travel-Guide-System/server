@@ -9,7 +9,8 @@ Content-Type: application/json
 {
     "name":"Shashank Sahu",
     "email":"shashankcs083@gmail.com",
-    "mobileNo":"6307717181"
+    "mobileNo":"6307717181",
+    
 }
 
 
@@ -19,7 +20,7 @@ POST http://localhost:80/auth/login/
 Content-Type: application/json
 
 {
-    "mobileNo":"6307717161"
+    "mobileNo":"6394233643"
 }
 
 
@@ -29,7 +30,47 @@ POST http://localhost:80/auth/verifyOTP/
 Content-Type: application/json
 
 {
-    "mobileNo":"6307717161",
-    "otp":158415
+    "mobileNo":"6394233643",
+    "otp":"166803"
 }
 
+
+###
+
+POST http://localhost:80/user/updateProfile/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcxNjEiLCJpYXQiOjE2MTkyNTUzOTd9.ZyDUMsTIfin-vA4uSikij-_-myYLLAZ1LFV7MIL0354
+
+{
+    "name":"Shashank Sahu",
+    "mobileNo":"6307717161",
+    "dob":"17/05/2000",
+    "gender":"M"
+}
+
+
+### Guide Profile Creation
+
+POST http://localhost:80/guide/updateProfile/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzOTQyMzM2NDMiLCJpYXQiOjE2MTkyNTU5MzN9.VBYxRF_CGoM2obRnFFf1eLw97A7fz4HhPabVdIXCAn8
+
+{
+    "name":"Shobit Guide",
+    "mobileNo":"6394233643",
+    "dob":"17/05/1900",
+    "gender":"F"
+}
+
+
+### updateLocation
+
+
+POST http://localhost:80/user/updateLocation/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcxNjEiLCJpYXQiOjE2MTkyNTUzOTd9.ZyDUMsTIfin-vA4uSikij-_-myYLLAZ1LFV7MIL0354
+
+{
+    "latitude":80,
+    "longitude":100
+}
