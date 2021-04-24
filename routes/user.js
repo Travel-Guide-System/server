@@ -55,7 +55,8 @@ router.post("/updateLocation", check_auth, async (req, res) => {
 router.post("/searchGuides", check_auth, async (req, res) => {
 	try {
 		const { latitude, longitude } = req.body;
-		let maxDistance = 10000000;
+		console.log(latitude, longitude);
+		let maxDistance = 10000; //10 km
 		let data = await Guide.aggregate([
 			{
 				$geoNear: {
@@ -63,9 +64,10 @@ router.post("/searchGuides", check_auth, async (req, res) => {
 						type: "Point",
 						coordinates: [parseFloat(longitude), parseFloat(latitude)],
 					},
-					maxDistance: maxDistance, //5km
+					maxDistance: maxDistance,
 					spherical: true,
 					distanceField: "distance",
+					query: { active: true }, //Only take active users
 				},
 			},
 		]);
@@ -74,6 +76,28 @@ router.post("/searchGuides", check_auth, async (req, res) => {
 	} catch (err) {
 		console.log(err);
 		res.status(500).send("Internal Server Error");
+	}
+});
+
+router.post('/rating', check_auth, async (req, res) => {
+	try{
+	  const { rating, serviceID } = req.body;
+	  const currentService = await Service.findOne({_id: serviceID});
+	  if(!currentService) return res.status(404).send("No such service exists");
+	  if(isNaN(currentService.userRating)) {
+		currentService.userRating = parseFloat(rating);
+		//update the user rating
+		const currentGuide = await Guide.findOne({_id: currentService.guide});
+		let currentGuideUpdatedRating =  (currentGuide.rating + parseFloat(rating))/2;
+		currentGuideUpdatedRating = parseFloat(currentGuideUpdatedRating.toFixed(2));
+		await  currentGuideUpdatedRating.save();
+		res.status(200).send("Rating submitted successfully");
+	  } else {
+		res.status(200).send("You already rated the rider");
+	  }
+	} catch(err) {
+	  console.log('Internal server error in guide rating', err);
+	  res.status(500).send("Please try after some time");
 	}
 });
 

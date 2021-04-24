@@ -22,7 +22,10 @@ const userSchema = new mongoose.Schema({
 		default:"O",
 		required:true,
 	},
-
+	rating: {
+		type: Number,
+		default: 5.0,
+	},
 	location: {
         type: {
             type: String, 

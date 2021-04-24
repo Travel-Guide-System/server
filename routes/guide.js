@@ -3,11 +3,13 @@ const jwt = require("jsonwebtoken");
 const Guide = require("../models/guide");
 const OTP = require("../models/otp");
 const sms = require("../services/sms");
+const Service = require('../models/service');
 const check_auth= require("../middleware/check-auth");
+const User = require('../models/user');
 
 
-router.post("/updateProfile", async (req,res)=>{
-    const {name,mobileNo,dob,gender}=req.body;
+router.post("/updateProfile", check_auth, async (req,res)=>{
+    const {name,mobileNo,dob,gender,longitude,latitude}=req.body;
     try{
       const otp= await OTP.findOne({mobileNo});
       if(otp && otp.verified){
@@ -16,7 +18,12 @@ router.post("/updateProfile", async (req,res)=>{
           return res.status(403).send("Guide Exists");
         }
 
-        let guide=new Guide({name,mobileNo,dob,gender});
+        let guide=new Guide({name,mobileNo,dob,gender, 
+          location: {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          }
+        });
         await guide.save();
         await OTP.deleteOne({mobileNo});
         res.status(200).send("Guide Profile Saved");
@@ -28,6 +35,41 @@ router.post("/updateProfile", async (req,res)=>{
       console.log(err);
       res.status(500).send("Internal Server Error");
     }
+});
+
+router.post('/swithcActive',check_auth, async (req, res) => {
+  try {
+    const { active } = req.body
+    const currentGuide = await Guide.findOne({mobileNo: req.user.mobileNo});
+    currentGuide.active = active;
+    await currentGuide.save();
+    res.status(200).send(`You are currently ${active ? '' : 'not '}active`);
+  } catch(err) {
+    console.log("Internal server error in switch Active", err);
+    res.status(500).send("Please try after some time");
+  }
+});
+
+router.post('/rating', check_auth, async (req, res) => {
+  try{
+    const { rating, serviceID } = req.body;
+    const currentService = await Service.findOne({_id: serviceID});
+    if(!currentService) return res.status(404).send("No such service exists");
+    if(isNaN(currentService.guideRating)) {
+      currentService.guideRating = parseFloat(rating);
+      //update the user rating
+      const currentUser = await User.findOne({_id: currentService.user});
+      let currentUserUpdatedRating =  (currentUser.rating + parseFloat(rating))/2;
+      currentUserUpdatedRating = parseFloat(currentUserUpdatedRating.toFixed(2));
+      await  currentUserUpdatedRating.save();
+      res.status(200).send("Rating submitted successfully");
+    } else {
+      res.status(200).send("You already rated the rider");
+    }
+  } catch(err) {
+    console.log('Internal server error in guide rating', err);
+    res.status(500).send("Please try after some time");
+  }
 });
 
 router.get("/all",async (req,res)=>{

@@ -31,7 +31,7 @@ Content-Type: application/json
 
 {
     "mobileNo":"6394233643",
-    "otp":"166803"
+    "otp":"786141"
 }
 
 
@@ -53,13 +53,15 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcx
 
 POST http://localhost:80/guide/updateProfile/
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzOTQyMzM2NDMiLCJpYXQiOjE2MTkyNTU5MzN9.VBYxRF_CGoM2obRnFFf1eLw97A7fz4HhPabVdIXCAn8
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzOTQyMzM2NDMiLCJpYXQiOjE2MTkyNjE2MTl9.9A7iLqDH8AMKpVB70q1_lbGVKPq4ZZwnsmCbUjOp9Pw
 
 {
     "name":"Shobit Guide",
     "mobileNo":"6394233643",
     "dob":"17/05/1900",
-    "gender":"F"
+    "gender":"M",
+    "latitude": 80,
+    "longitude": 80
 }
 
 
@@ -68,7 +70,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzOTQyMzM2
 
 POST http://localhost:80/user/updateLocation/
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcxNjEiLCJpYXQiOjE2MTkyNTUzOTd9.ZyDUMsTIfin-vA4uSikij-_-myYLLAZ1LFV7MIL0354
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzOTQyMzM2NDMiLCJpYXQiOjE2MTkyNjE2MTl9.9A7iLqDH8AMKpVB70q1_lbGVKPq4ZZwnsmCbUjOp9Pw
 
 {
     "latitude":80,
@@ -85,9 +87,18 @@ Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcxNjEiLCJpYXQiOjE2MTkyNTUzOTd9.ZyDUMsTIfin-vA4uSikij-_-myYLLAZ1LFV7MIL0354
 
 {
-    "latitude": 80.992679,
-    "longitude":26.881481
+    "latitude": 26.881481,
+    "longitude": 80.992679
 }
 
+### switch active status of guide
+
+POST http://localhost:80/guide/swithcActive/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzOTQyMzM2NDMiLCJpYXQiOjE2MTkyNjE2MTl9.9A7iLqDH8AMKpVB70q1_lbGVKPq4ZZwnsmCbUjOp9Pw
+
+{
+    "active": false
+}
 
 
