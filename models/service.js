@@ -32,6 +32,12 @@ const schema = new mongoose.Schema({
         type: Number, //rating the guide gave to the user
         default: -1,
     },
+
+    status:{
+        type:String,
+        enum:['INIT','ACCEPT','DECLINE','COMPLETED'],
+        default:'INIT',
+    }
 });
 
 const model = mongoose.model('Service', schema);

@@ -118,4 +118,13 @@ router.post("/rating", check_auth, async (req, res) => {
 	}
 });
 
+
+router.post("/newService",check_auth,async (req,res)=>{
+	const {latitude,longitute,guide} = req.body();
+	const service=new Service({latitude,longitude,guide});
+	await service.save();
+	//Send Message to Specific Guide
+	
+});	
+
 module.exports = router;
