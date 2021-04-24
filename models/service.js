@@ -26,11 +26,11 @@ const schema = new mongoose.Schema({
     },
     userRating: {
         type: Number, //rating the user gave to the guide
-        default: NaN,
+        default: -1,
     },
     guideRating: {
         type: Number, //rating the guide gave to the user
-        default: NaN,
+        default: -1,
     },
 });
 

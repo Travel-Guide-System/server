@@ -72,32 +72,37 @@ router.post("/searchGuides", check_auth, async (req, res) => {
 			},
 		]);
 
-    res.status(200).json(data);
+		res.status(200).json(data);
 	} catch (err) {
 		console.log(err);
 		res.status(500).send("Internal Server Error");
 	}
 });
 
-router.post('/rating', check_auth, async (req, res) => {
-	try{
-	  const { rating, serviceID } = req.body;
-	  const currentService = await Service.findOne({_id: serviceID});
-	  if(!currentService) return res.status(404).send("No such service exists");
-	  if(isNaN(currentService.userRating)) {
-		currentService.userRating = parseFloat(rating);
-		//update the user rating
-		const currentGuide = await Guide.findOne({_id: currentService.guide});
-		let currentGuideUpdatedRating =  (currentGuide.rating + parseFloat(rating))/2;
-		currentGuideUpdatedRating = parseFloat(currentGuideUpdatedRating.toFixed(2));
-		await  currentGuideUpdatedRating.save();
-		res.status(200).send("Rating submitted successfully");
-	  } else {
-		res.status(200).send("You already rated the rider");
-	  }
-	} catch(err) {
-	  console.log('Internal server error in guide rating', err);
-	  res.status(500).send("Please try after some time");
+router.post("/rating", check_auth, async (req, res) => {
+	try {
+		const { rating, serviceID } = req.body;
+		const currentService = await Service.findOne({ _id: serviceID });
+		if (!currentService) return res.status(404).send("No such service exists");
+		if (currentService.userRating==-1) {
+			currentService.userRating = parseFloat(rating);
+      let totalServices= (await Service.findAll({guide: currentService.guide})).length;
+			//update the user rating
+			const currentGuide = await Guide.findOne({ _id: currentService.guide });
+      let updatedRating=0;
+      if (totalServices!=0)
+         updatedRating= ((totalServices-1)*currentGuide.rating + parseFloat(rating))/totalServices
+      currentGuide.rating=updatedRating;
+      //Saving 
+      await currentService.save();
+			await currentGuide.save();
+			res.status(200).send("Rating submitted successfully");
+		} else {
+			res.status(200).send("You already rated the guide");
+		}
+	} catch (err) {
+		console.log("Internal server error in guide rating", err);
+		res.status(500).send("Please try after some time");
 	}
 });
 
