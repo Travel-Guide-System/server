@@ -57,23 +57,30 @@ router.post("/rating", check_auth, async (req, res) => {
 		const { rating, serviceID } = req.body;
 		const currentService = await Service.findOne({ _id: serviceID });
 		if (!currentService) return res.status(404).send("No such service exists");
-		if (currentService.guideRating==-1) {
+		if (currentService.guideRating == -1) {
 			currentService.guideRating = parseFloat(rating);
 			//update the user rating
 			const currentUser = await User.findOne({ _id: currentService.user });
-      let totalServices= (await Service.findAll({guide: currentService.guide})).length;
+			let totalServices = (
+				await Service.find({
+					guide: currentService.guide,
+					guideRating: { $gt: -1 },
+				})
+			).length;
 
-      let updatedRating=0;
-      if(totalServices!=0)
-         updatedRating= ((totalServices-1)*currentUser.rating + parseFloat(rating))/totalServices;
-      currentUser.rating=updatedRating;
-      
-      await currentUser.save();
-      await currentService.save();
+			let updatedRating =
+				(totalServices * currentUser.rating + parseFloat(rating)) /
+				(totalServices + 1);
+
+			updatedRating.toPrecision(2);
+			currentUser.rating = updatedRating;
+
+			await currentUser.save();
+			await currentService.save();
 
 			res.status(200).send("Rating submitted successfully");
 		} else {
-			res.status(200).send("You already rated the rider");
+			res.status(200).send("You already rated the User");
 		}
 	} catch (err) {
 		console.log("Internal server error in guide rating", err);

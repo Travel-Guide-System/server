@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const Guide = require("../models/guide");
 const OTP = require("../models/otp");
+const Service = require("../models/service.js");
 const sms = require("../services/sms");
 const check_auth = require("../middleware/check-auth");
 
@@ -79,22 +80,33 @@ router.post("/searchGuides", check_auth, async (req, res) => {
 	}
 });
 
+// User will rate Guide
 router.post("/rating", check_auth, async (req, res) => {
 	try {
 		const { rating, serviceID } = req.body;
 		const currentService = await Service.findOne({ _id: serviceID });
 		if (!currentService) return res.status(404).send("No such service exists");
-		if (currentService.userRating==-1) {
+		if (currentService.userRating == -1) {
+			//Setting userRating in services
 			currentService.userRating = parseFloat(rating);
-      let totalServices= (await Service.findAll({guide: currentService.guide})).length;
-			//update the user rating
+
+			//Finding all the sevices done by the guide in which he was rated by user
+			let totalServices = (
+				await Service.find({
+					guide: currentService.guide,
+					userRating: { $gt: -1 },
+				})
+			).length;
+
+			//update the guide rating
 			const currentGuide = await Guide.findOne({ _id: currentService.guide });
-      let updatedRating=0;
-      if (totalServices!=0)
-         updatedRating= ((totalServices-1)*currentGuide.rating + parseFloat(rating))/totalServices
-      currentGuide.rating=updatedRating;
-      //Saving 
-      await currentService.save();
+			let updatedRating =
+				(totalServices * currentGuide.rating + parseFloat(rating)) /
+				(totalServices + 1);
+			updatedRating.toPrecision(2);
+			currentGuide.rating = updatedRating;
+			//Saving
+			await currentService.save();
 			await currentGuide.save();
 			res.status(200).send("Rating submitted successfully");
 		} else {
