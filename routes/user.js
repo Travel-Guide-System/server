@@ -55,7 +55,7 @@ router.post("/updateLocation", check_auth, async (req, res) => {
 router.post("/searchGuides", check_auth, async (req, res) => {
 	try {
 		const { latitude, longitude } = req.body;
-		let maxDistance = 5000;
+		let maxDistance = 10000000;
 		let data = await Guide.aggregate([
 			{
 				$geoNear: {

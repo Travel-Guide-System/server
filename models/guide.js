@@ -30,7 +30,19 @@ const guideSchema = new mongoose.Schema({
 	active:{
 		type:Boolean,
 		default:false
-	}
+	},
+	location: {
+        type: {
+            type: String, 
+            enum: ['Point'], 
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
 });
+guideSchema.index({location: '2dsphere'})
 
 module.exports = mongoose.model("Guide", guideSchema);

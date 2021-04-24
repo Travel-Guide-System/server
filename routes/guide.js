@@ -30,4 +30,8 @@ router.post("/updateProfile", async (req,res)=>{
     }
 });
 
+router.get("/all",async (req,res)=>{
+  res.json(Guide.find({}));
+})
+
 module.exports = router;

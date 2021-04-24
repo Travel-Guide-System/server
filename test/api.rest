@@ -74,3 +74,20 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcx
     "latitude":80,
     "longitude":100
 }
+
+
+### get nearby Guides
+
+
+
+POST http://localhost:80/user/searchGuides/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGVObyI6IjYzMDc3MTcxNjEiLCJpYXQiOjE2MTkyNTUzOTd9.ZyDUMsTIfin-vA4uSikij-_-myYLLAZ1LFV7MIL0354
+
+{
+    "latitude": 80.992679,
+    "longitude":26.881481
+}
+
+
+
